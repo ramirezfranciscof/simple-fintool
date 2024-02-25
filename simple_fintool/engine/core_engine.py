@@ -59,6 +59,9 @@ class CoreEngine(BaseModel):
 
             for row in csv_reader:
 
+                # Convert to datetime
+                # Custom way knowing the exact month string is faster than the more
+                # versatile and secure intrinsic datetime function.
                 try:
                     instr_name = row[0]
                     # instr_date = datetime.strptime(row[1], "%d-%b-%Y").date()
@@ -71,6 +74,7 @@ class CoreEngine(BaseModel):
                 except (IndexError, ValueError) as error:
                     raise ValueError(f"Error parsing row {row}") from error
 
+                # Filter out weekend days
                 if instr_date.weekday() >= 5:
                     date_string = instr_date.strftime("%Y-%m-%d")
                     print(f"Entry for invalid (weekend) date: {date_string}")
