@@ -19,6 +19,21 @@ from .analizers import (
     TotalMean,
 )
 
+MONTH_NAME_TO_NUMBER = {
+    "Jan": 1,
+    "Feb": 2,
+    "Mar": 3,
+    "Apr": 4,
+    "May": 5,
+    "Jun": 6,
+    "Jul": 7,
+    "Aug": 8,
+    "Sep": 9,
+    "Oct": 10,
+    "Nov": 11,
+    "Dec": 12,
+}
+
 
 class CoreEngine(BaseModel):
     class Config:
@@ -46,7 +61,12 @@ class CoreEngine(BaseModel):
 
                 try:
                     instr_name = row[0]
-                    instr_date = datetime.strptime(row[1], "%d-%b-%Y").date()
+                    # instr_date = datetime.strptime(row[1], "%d-%b-%Y").date()
+                    rowlist = row[1].split("-")
+                    newy = int(rowlist[2])
+                    newm = MONTH_NAME_TO_NUMBER[rowlist[1]]
+                    newd = int(rowlist[0])
+                    instr_date = datetime(newy, newm, newd)
                     instr_price = float(row[2])
                 except (IndexError, ValueError) as error:
                     raise ValueError(f"Error parsing row {row}") from error
