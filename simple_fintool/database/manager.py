@@ -17,17 +17,21 @@ class DatabaseManager:
         """Initialize the manager."""
         self._db_context_manager = db_context_manager
         self._cached_multipliers = self.get_multipliers()
-        self._last_cache = datetime.now()
+        self._cache_dt = timedelta(seconds=5)
+        self._next_cache = datetime.now() + self._cache_dt
 
-    def get_stashed_multiplier(self, instrument_name):
-        if self._last_cache + timedelta(seconds=5) < datetime.now():
+    def get_stashed_multiplier(self, instrument_name) -> float:
+        nowtime = datetime.now()
+        if self._next_cache < nowtime:
             self._cached_multipliers = self.get_multipliers()
-            self._last_cache = datetime.now()
+            self._next_cache = nowtime + self._cache_dt
         if instrument_name not in self._cached_multipliers:
             return 1.0
         return self._cached_multipliers[instrument_name]
 
-    def get_multipliers(self, requested_multipliers: Optional[List[str]] = None):
+    def get_multipliers(
+        self, requested_multipliers: Optional[List[str]] = None
+    ) -> Dict[str, float]:
         """Add multipliers from input dict."""
         query_str = select(InstrumentPriceModifier)
 
@@ -42,7 +46,7 @@ class DatabaseManager:
         results = {element[0].name: element[0].multiplier for element in results}
         return results
 
-    def update_multipliers(self, input_dict: Dict[str, float]):
+    def update_multipliers(self, input_dict: Dict[str, float]) -> None:
         """Update multipliers from input dict."""
         with self._db_context_manager() as db_session:
             for mult_name, mult_value in input_dict.items():

@@ -13,7 +13,7 @@ FILE_DIRPATH = pathlib.Path(__file__).parent.resolve()
 MAIN_DIRPATH = FILE_DIRPATH.parent.parent.resolve()
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{MAIN_DIRPATH}/sqlite.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 
 
 @contextmanager

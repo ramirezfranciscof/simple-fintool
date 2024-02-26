@@ -13,7 +13,7 @@ args=(
     --rm
     # will delete the container after it is stopped
 
-    -p 8765:8765 -p 8000:8000
+    -p 8888:8888 #-p 8000:8000
     # Publishes the ports so that it can be accessed by the host.
     # Order: <host_port>:<cont_port>
 

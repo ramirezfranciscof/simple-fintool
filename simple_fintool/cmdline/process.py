@@ -18,6 +18,9 @@ import click
 def cmd_process(source, pandas):
     """Start the processing of the source file."""
     from simple_fintool.engine.core_engine import CoreEngine
+
+    # from simple_fintool.engine.core_engine_split import CoreEngine
+    # from simple_fintool.engine.core_engine_batched import CoreEngine
     from simple_fintool.engine_df.core_engine import CoreEngineDF
 
     if pandas:
